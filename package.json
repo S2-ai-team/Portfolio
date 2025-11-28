@@ -3,11 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "hhttps://github.com/S2-ai-team/Portfolio/",
+  "homepage": "https://s2-ai-team.github.io/Portfolio/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",  
+    "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
