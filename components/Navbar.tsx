@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
       {/* Logo */}
       <div className="cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
         <h1 className="text-xl md:text-2xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 drop-shadow-sm">
-          3D EARTH
+          Harrison's Portfolio
         </h1>
       </div>
 

@@ -16,9 +16,9 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ currentMode, onModeChange, 
         {/* Intro / Status */}
         <div className="space-y-2 animate-in slide-in-from-left-10 duration-700">
             <h2 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight">
-              3D <br />
+              Harrison's <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
-                ERATH!
+                3D EARTH!
               </span>
             </h2>
             <p className="text-slate-400 text-lg max-w-md">
