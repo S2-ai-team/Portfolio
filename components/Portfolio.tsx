@@ -1,9 +1,39 @@
 
 import React, { useState, useEffect } from 'react';
 
+// Interface for Project Data
+interface Project {
+  title: string;
+  description: string;
+  imageUrl: string;
+  link: string;
+}
+
+const PROJECTS: Project[] = [
+  {
+    title: "CodeSync",
+    description: "A web-based code editor equipped with AI-powered debugging and automated code analysis tools.",
+    imageUrl: "https://github.com/user-attachments/assets/b350c7a1-628e-4a36-a8fa-e9e7b8c8dee4",
+    link: "https://s2-ai-team.github.io/codesync/"
+  },
+  {
+    title: "AI_SOCCER",
+    description: "AI_SOCCER Competition",
+    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsWxLId3msV2xSQmmyOKRaQDSo6F_PoR9NTA&s",
+    link: "https://github.com/S2-ai-team/AI-soccer_HSU"
+  },
+  {
+    title: "X.B.T",
+    description: "Xceeper hacking tool",
+    imageUrl: "https://github.com/S2-ai-team/X.B.T/raw/master/test.png",
+    link: "https://github.com/S2-ai-team/X.B.T"
+  }
+];
+
 const Portfolio: React.FC = () => {
   const [showTeam, setShowTeam] = useState(false);
   const [showTopBtn, setShowTopBtn] = useState(false);
+  const [previewProject, setPreviewProject] = useState<Project | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,8 +46,29 @@ const Portfolio: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [showTeam]);
 
+  // Disable body scroll when modal is open
+  useEffect(() => {
+    if (previewProject) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [previewProject]);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Helper to check if URL is likely blocked by X-Frame-Options (e.g. github.com repo pages)
+  const isEmbeddable = (url: string) => {
+    // github.com blocks iframes. github.io usually allows them.
+    if (url.includes('github.com') && !url.includes('github.io')) {
+      return false;
+    }
+    return true;
   };
 
   return (
@@ -114,7 +165,7 @@ const Portfolio: React.FC = () => {
              <div className="flex flex-wrap justify-center gap-2">
                <img src="https://img.shields.io/badge/Raspberry%20Pi-A22846?style=for-the-badge&logo=Raspberry-Pi&logoColor=white" alt="RPI"/>
                <img src="https://img.shields.io/badge/Arduino-00979D?style=for-the-badge&logo=Arduino&logoColor=white" alt="Arduino"/>
-               <img src="https://img.shields.io/badge/AVR-EE4C2C?style=for-the-badge&logoColor=white" alt="AVR"/>
+               <img src="https://img.shields.io/badge/AVR-EE4C2C?style=for-the-badge&logo=Arduino&logoColor=white" alt="AVR"/>
                <img src="https://img.shields.io/badge/Bambu%20Lab-76B900?style=for-the-badge&logo=bambulab&logoColor=white" alt="Bambu"/>
                <img src="https://img.shields.io/badge/Autodesk%20Fusion%20360-FF6F00?style=for-the-badge&logo=Autodesk&logoColor=white" alt="Fusion360"/>
              </div>
@@ -125,41 +176,31 @@ const Portfolio: React.FC = () => {
       {/* Projects */}
       <section id="projects" className="py-20 px-4 max-w-6xl mx-auto">
          <h2 className="text-3xl font-bold text-center mb-12">🛠️ Projects</h2>
-         {/* Changed to 3 columns on large screens for better balance */}
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            {/* CodeSync */}
-            <a href="https://s2-ai-team.github.io/codesync/" target="_blank" rel="noreferrer" className="group h-full">
-              <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5 transition-all duration-300 hover:-translate-y-2 hover:border-[#58a6ff] h-full flex flex-col">
-                <div className="h-48 w-full mb-4 overflow-hidden rounded-lg bg-gray-800">
-                  <img src="https://github.com/user-attachments/assets/b350c7a1-628e-4a36-a8fa-e9e7b8c8dee4" alt="CodeSync" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
+            {PROJECTS.map((project, idx) => (
+              <div 
+                key={idx}
+                onClick={() => setPreviewProject(project)}
+                className="group h-full cursor-pointer"
+              >
+                <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5 transition-all duration-300 hover:-translate-y-2 hover:border-[#58a6ff] h-full flex flex-col">
+                  <div className="h-48 w-full mb-4 overflow-hidden rounded-lg bg-gray-800 relative">
+                    <img 
+                      src={project.imageUrl} 
+                      alt={project.title} 
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span className="text-white font-semibold bg-black/50 px-4 py-2 rounded-full border border-white/20 backdrop-blur-sm">
+                            👀 Preview
+                        </span>
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#58a6ff]">{project.title}</h3>
+                  <p className="text-gray-400 text-sm flex-grow">{project.description}</p>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#58a6ff]">CodeSync</h3>
-                <p className="text-gray-400 text-sm flex-grow">A web-based code editor equipped with AI-powered debugging and automated code analysis tools.</p>
               </div>
-            </a>
-
-            {/* AI_SOCCER */}
-            <a href="https://github.com/S2-ai-team/AI-soccer_HSU" target="_blank" rel="noreferrer" className="group h-full">
-              <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5 transition-all duration-300 hover:-translate-y-2 hover:border-[#58a6ff] h-full flex flex-col">
-                <div className="h-48 w-full mb-4 overflow-hidden rounded-lg bg-gray-800">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsWxLId3msV2xSQmmyOKRaQDSo6F_PoR9NTA&s" alt="AI_SOCCER" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#58a6ff]">AI_SOCCER</h3>
-                <p className="text-gray-400 text-sm flex-grow">AI_SOCCER Competition</p>
-              </div>
-            </a>
-
-            {/* X.B.T */}
-            <a href="https://github.com/S2-ai-team/X.B.T" target="_blank" rel="noreferrer" className="group h-full">
-              <div className="bg-[#161b22] border border-[#30363d] rounded-xl p-5 transition-all duration-300 hover:-translate-y-2 hover:border-[#58a6ff] h-full flex flex-col">
-                <div className="h-48 w-full mb-4 overflow-hidden rounded-lg bg-gray-800">
-                  <img src="https://github.com/S2-ai-team/X.B.T/raw/master/test.png" alt="X.B.T" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#58a6ff]">X.B.T</h3>
-                <p className="text-gray-400 text-sm flex-grow">Xceeper hacking tool</p>
-              </div>
-            </a>
+            ))}
          </div>
       </section>
 
@@ -242,6 +283,79 @@ const Portfolio: React.FC = () => {
       
       {/* Hidden trigger for S2AI team display */}
       <button id="s2ai-trigger" className="hidden" onClick={() => setShowTeam(true)}></button>
+
+      {/* Preview Modal */}
+      {previewProject && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
+            onClick={() => setPreviewProject(null)}
+          ></div>
+          
+          {/* Modal Container */}
+          <div className="relative w-full max-w-6xl h-[85vh] bg-[#0d1117] rounded-xl border border-gray-700 shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800 bg-[#161b22]">
+              <div className="flex items-center gap-4">
+                 <h3 className="text-xl font-bold text-white">{previewProject.title}</h3>
+                 <a 
+                   href={previewProject.link} 
+                   target="_blank" 
+                   rel="noreferrer"
+                   className="text-sm bg-[#238636] hover:bg-[#2ea043] text-white px-3 py-1.5 rounded-md transition-colors flex items-center gap-2"
+                 >
+                   Open in New Tab 
+                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                   </svg>
+                 </a>
+              </div>
+              <button 
+                onClick={() => setPreviewProject(null)}
+                className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Content (Iframe or Placeholder) */}
+            <div className="flex-1 bg-white relative">
+              {isEmbeddable(previewProject.link) ? (
+                <iframe 
+                  src={previewProject.link} 
+                  className="w-full h-full border-none"
+                  title="Project Preview"
+                />
+              ) : (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0d1117] text-center p-8">
+                   <div className="w-24 h-24 mb-6 rounded-full bg-gray-800 flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-gray-500">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                      </svg>
+                   </div>
+                   <h4 className="text-2xl font-bold text-white mb-2">Preview Not Available</h4>
+                   <p className="text-gray-400 max-w-md mb-8">
+                     The external website (GitHub) prevents embedding in a preview window for security reasons. Please visit the link directly.
+                   </p>
+                   <a 
+                     href={previewProject.link} 
+                     target="_blank" 
+                     rel="noreferrer"
+                     className="bg-[#58a6ff] hover:bg-[#4096ff] text-black font-bold py-3 px-8 rounded-lg transition-colors"
+                   >
+                     Visit Website
+                   </a>
+                </div>
+              )}
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 };
