@@ -1,12 +1,24 @@
+import path from 'path'
+import { defineConfig, loadEnv } from 'vite'
+import react from '@vitejs/plugin-react'
 
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  // 'base' is crucial for GitHub Pages. 
-  // It ensures assets are loaded relative to the current path, 
-  // making it work regardless of the repo name (e.g. user.github.io/repo-name/).
-  base: './', 
-});
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, '.', '')
+  return {
+    base: '/Portfolio/', 
+    server: {
+      port: 3000,
+      host: '0.0.0.0',
+    },
+    plugins: [react()],
+    define: {
+      'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+    },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, '.'),
+      },
+    },
+  }
+})
