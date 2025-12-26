@@ -27,7 +27,14 @@ const PROJECTS: Project[] = [
     description: "Xceeper hacking tool",
     imageUrl: "https://github.com/S2-ai-team/X.B.T/raw/master/test.png",
     link: "https://github.com/S2-ai-team/X.B.T"
-  }
+  },
+  {
+    title: "bambu lab",
+    description: "Xceeper hacking tool",
+    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT06NuUCwPkhSv73vhZQBCxUmVX66WUK3q-AI2ySU6DgJPVY3j07wDi5bkOMOiVtvDs7Sh5SA0SOricappzfukaXNV6uAr5i-R1SEJCMFe9&s=10",
+    link: "https://kr.store.bambulab.com/?gad_source=1&gad_campaignid=21867577812&gbraid=0AAAAA-b105KAsIs_ksr9_Xi7CCSCyFRLf&gclid=CjwKCAiA3rPKBhBZEiwAhPNFQDqy3cQzIwrzLcJElQiLY7PtxCeNHNBe8q0vqOZ2snkjdMZKXq0mFhoC9YAQAvD_BwE"
+  },
+  
 ];
 
 const Portfolio: React.FC = () => {
